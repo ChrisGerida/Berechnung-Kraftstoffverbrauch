@@ -1,0 +1,52 @@
+Public Class Form1
+    'Programm zur Berechnung des Kraftstoffverbrauchs'
+    'Speicherplatz für Variablen einrichten'
+    Dim DPreis As Double, Menge_Liter_gesamt As Double, Einzelkosten As Double, Strecke_neu As Double, km_neu As Double, km_alt As Double
+    Dim Durchschnittsverbrauch_gesamt As Double, Menge_Liter As Double, Verbrauch As Double, gefahrene_Strecke As Double
+    Dim Gesamtkosten As Double
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        'Eingaben'
+        km_alt = TextBox1.Text 'sauber auf Double konvertiert'
+        km_neu = CDbl(TextBox2.Text) 'andere Möglichkeit'
+        Menge_Liter = CDbl(TextBox3.Text)
+        DPreis = CDbl(TextBox9.Text)
+
+        'Berechnungen'
+        Strecke_neu = km_neu - km_alt
+        Verbrauch = Menge_Liter / Strecke_neu * 100
+        Einzelkosten = DPreis * Menge_Liter
+        Gesamtkosten = Gesamtkosten + Einzelkosten
+        gefahrene_Strecke = gefahrene_Strecke + Strecke_neu
+        Menge_Liter_gesamt = Menge_Liter_gesamt + Menge_Liter
+        Durchschnittsverbrauch_gesamt = Menge_Liter_gesamt / gefahrene_Strecke * 100
+
+        'Ausgaben'
+        TextBox4.Text = Strecke_neu
+        TextBox5.Text = Verbrauch
+        TextBox6.Text = Einzelkosten
+        TextBox7.Text = Gesamtkosten
+        TextBox8.Text = CStr(Durchschnittsverbrauch_gesamt)
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        End
+    End Sub
+
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        gefahrene_Strecke = Menge_Liter_gesamt = Gesamtkosten = 0 'sinvolle Anfangswerte ersetzen'
+    End Sub
+
+    'einfache Eingabeabsicherung'
+    Private Sub TextBox2_Validating(sender As Object, e As ComponentModel.CancelEventArgs) Handles TextBox2.Validating
+        'Dim KeepFocus As Boolean = EventArgs.Cancel'
+        Dim KeepFocus As Boolean = e.Cancel
+        If CDbl(TextBox2.Text) - CDbl(TextBox1.Text) < 0 Then
+            'Text1.SetFocus'
+            KeepFocus = True
+            MsgBox("km_neu kleiner als km_alt!", , "Text2")
+        End If
+        'EventArgs.Cancel = KeepFocus'
+        e.Cancel = KeepFocus
+    End Sub
+End Class
